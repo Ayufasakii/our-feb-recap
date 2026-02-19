@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Geist', Arial, Helvetica, sans-serif;
+  letter-spacing: 0.02em;
+  font-size: 18px;
+  transition: background 0.4s;
+}
+
+.romantic-gradient {
+  background: linear-gradient(135deg, #f8e8ff 0%, #e6f0ff 100%);
+}
+
+.card-romantic {
+  background: linear-gradient(135deg, #ffe6f0 0%, #e6f0ff 100%);
+  box-shadow: 0 8px 32px rgba(255, 182, 193, 0.12);
+  border-radius: 32px;
+  padding: 0;
+}
+
+.big-text-romantic {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 700;
+  color: #b34fa3;
+  text-align: center;
+  padding: 0 24px;
+  line-height: 1.2;
+  word-break: break-word;
+  width: 100%;
+  text-shadow: 0 2px 16px #fff6fa, 0 1px 2px #b34fa3;
+}
