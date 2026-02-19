@@ -1,4 +1,9 @@
+
 import type { Metadata } from "next";
+import Soundtrack from "./components/Soundtrack";
+import { Inter } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Our Feb",
@@ -9,17 +14,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="th">
-      <body
-        style={{
-          margin: 0,
-          fontFamily:
-            'Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans Thai", sans-serif',
-          background: "linear-gradient(135deg, #f8e8ff 0%, #e6f0ff 100%)",
-          color: "#222",
-          minHeight: "100vh",
-        }}
-      >
+    <html lang="en">
+      <body className={inter.className} style={{
+        minHeight: "100vh",
+        background: "linear-gradient(120deg, #ffe6f0 0%, #fff6fa 100%)",
+        color: "#b34fa3"
+      }}>
+          {/* Romantic soundtrack, auto-play, loop */}
+          <Soundtrack src="/soundtrack/romantic.mp3" />
         {children}
       </body>
     </html>

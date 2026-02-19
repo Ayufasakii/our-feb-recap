@@ -34,9 +34,9 @@ export default function UnlockPage() {
           padding: 16,
         }}
       >
-        <h1 style={{ margin: 0, fontSize: 22 }}>ใส่รหัสเพื่อดู Recap</h1>
+        <h1 style={{ margin: 0, fontSize: 22 }}>ใส่รหัสเป็น วันนี้วันเกิดเธอวันเกิดชั้น</h1>
         <p style={{ margin: "8px 0 0 0", color: "rgba(0,0,0,0.6)" }}>
-          หน้า Recap เป็นแบบ read-only
+          เช่น 010203
         </p>
 
         <form
