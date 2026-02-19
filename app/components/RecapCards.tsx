@@ -10,6 +10,12 @@ type RecapItem = {
 };
 
 export default function RecapPager({ items }: { items: RecapItem[] }) {
+        // ...existing code...
+
+        // No right-side indicator bar anymore
+
+        // State for mobile drawer menu
+        const [drawerOpen, setDrawerOpen] = useState(false);
       const [rejectBtnPos, setRejectBtnPos] = useState<{top: number, left: number, key: number}>({top: 0, left: 0, key: 0});
     const [showLove, setShowLove] = useState(false);
   const [index, setIndex] = useState(0);
@@ -77,8 +83,162 @@ export default function RecapPager({ items }: { items: RecapItem[] }) {
 
   return (
     <div>
+      {/* Drawer menu (centered on desktop, bottom on mobile) */}
+      <style>{`
+        .recap-mobile-drawer {
+          position: fixed;
+          z-index: 60;
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          pointer-events: none;
+        }
+        .recap-mobile-drawer-inner {
+          pointer-events: auto;
+          background: #fff6fa;
+          border: 2px solid #b34fa3;
+          box-shadow: 0 -2px 16px #b34fa355;
+          min-width: 180px;
+          max-width: 90vw;
+          padding: 0;
+          overflow: hidden;
+          transition: max-height 0.3s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .recap-mobile-drawer-list {
+          max-height: 220px;
+          overflow-y: auto;
+          background: none;
+        }
+        .recap-mobile-drawer-btn {
+          width: 100%;
+          background: #b34fa3;
+          color: #fff;
+          font-size: 18px;
+          font-weight: 700;
+          border: none;
+          border-radius: 18px 18px 0 0;
+          padding: 12px 0 10px 0;
+          cursor: pointer;
+          letter-spacing: 0.04em;
+        }
+        .recap-mobile-drawer-list button {
+          width: 100%;
+          background: none;
+          border: none;
+          color: #b34fa3;
+          font-size: 16px;
+          font-weight: 500;
+          padding: 10px 0;
+          border-bottom: 1px solid #f3e6f9;
+          cursor: pointer;
+          transition: background 0.15s;
+        }
+        .recap-mobile-drawer-list button.selected {
+          background: #ffe6f0;
+          color: #b34fa3;
+          font-weight: 700;
+        }
+        @media (max-width: 700px) {
+          .recap-mobile-drawer {
+            left: 0; right: 0; bottom: 72px;
+            align-items: flex-end;
+          }
+          .recap-mobile-drawer-inner {
+            border-radius: 18px 18px 0 0;
+          }
+        }
+        @media (min-width: 701px) {
+          .recap-mobile-drawer {
+            left: 0; right: 0; top: 32px;
+            bottom: auto;
+            align-items: flex-start;
+            pointer-events: none;
+          }
+          .recap-mobile-drawer-inner {
+            border-radius: 18px;
+            min-width: 260px;
+            max-width: 420px;
+            box-shadow: 0 4px 32px #b34fa355;
+          }
+        }
+      `}</style>
+
+      <div className="recap-mobile-drawer">
+        <div className="recap-mobile-drawer-inner" style={{ maxHeight: drawerOpen ? 300 : 48 }}>
+          <button className="recap-mobile-drawer-btn" onClick={() => setDrawerOpen(v => !v)}>
+            {drawerOpen ? "เลือกเหตุการณ์ ✕" : `เลือกเหตุการณ์ (${index + 1}/${total})`}
+          </button>
+          {drawerOpen && (
+            <div className="recap-mobile-drawer-list">
+              {items.map((it, i) => (
+                <button
+                  key={i}
+                  className={i === index ? "selected" : undefined}
+                  onClick={() => {
+                    setIndex(i);
+                    setDrawerOpen(false);
+                    setTimeout(() => scrollToIndex(i), 50);
+                  }}
+                >
+                  {it.title}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      {/* Mobile navigation arrows (show only on small screens) */}
+      <style>{`
+        @media (min-width: 701px) {
+          .recap-mobile-nav-arrows { display: none !important; }
+        }
+        @media (max-width: 700px) {
+          .recap-mobile-nav-arrows {
+            display: flex;
+            position: fixed;
+            left: 0; right: 0; bottom: 0;
+            z-index: 50;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px 24px 24px;
+            pointer-events: none;
+          }
+          .recap-mobile-nav-arrows button {
+            pointer-events: auto;
+            background: #fff6fa;
+            border: 2px solid #b34fa3;
+            color: #b34fa3;
+            border-radius: 50%;
+            width: 48px; height: 48px;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 2px 12px #b34fa355;
+            cursor: pointer;
+            opacity: 0.92;
+            transition: background 0.2s;
+          }
+          .recap-mobile-nav-arrows button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+          }
+        }
+      `}</style>
+      <div className="recap-mobile-nav-arrows">
+        <button onClick={() => setIndex(i => Math.max(0, i - 1))} disabled={!canPrev} aria-label="ก่อนหน้า">&#8592;</button>
+        <span style={{ flex: 1 }} />
+        <button onClick={() => setIndex(i => Math.min(total - 1, i + 1))} disabled={!canNext} aria-label="ถัดไป">&#8594;</button>
+      </div>
+      {/* Responsive style for indicator bar (global) */}
+      <style>{`
+        @media (max-width: 700px) {
+          .recap-indicator-bar-fixed {
+            display: none !important;
+          }
+        }
+      `}</style>
       {/* Page indicator bar at the right side */}
       <div
+        className="recap-indicator-bar-fixed"
         style={{
           position: "fixed",
           top: 60,
